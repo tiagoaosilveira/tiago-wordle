@@ -1,33 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const wordSize = 4;
+
+  const [currentTry, setCurrentTry] = useState(1);
+  const [currentPos, setCurrentPos] = useState(0);
+  const [tries, setTries] = useState(new Map([
+    ['try1', Array(4).fill(['',''])],
+    ['try2', Array(4).fill(['',''])],
+    ['try3', Array(4).fill(['',''])],
+  ]))
+
+  const solve = () => {
+
+  }
+
+  const handleKeyUp = (event) => {
+    if (event.key >= 'a' && event.key <= 'z') {
+      if (currentPos === wordSize) {
+        return;
+      }
+      setTries((prevState) => {
+        const newState = new Map(prevState);
+        const updatedTryData = newState.get(`try${currentTry}`);
+        updatedTryData[currentPos] = [event.key.toUpperCase(), ''];
+        return newState.set(`try${currentTry}`, updatedTryData);
+      })
+      setCurrentPos(currentPos + 1);
+    }
+    if (event.key === 'Backspace') {
+      setTries((prevState) => {
+        const newState = new Map(prevState);
+        const updatedTryData = newState.get(`try${currentTry}`);
+        updatedTryData[currentPos - 1] = ['', ''];
+        return newState.set(`try${currentTry}`, updatedTryData);
+      })
+      setCurrentPos(currentPos > 0 ? currentPos - 1 : 0);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keyup', handleKeyUp);
+    }
+  }, [handleKeyUp]);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className='try-container'>
+        { tries.get('try1').map(((try1, idx) => {
+          return <div className='box' key={idx}>{try1[0]}</div>
+        }))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
