@@ -1,5 +1,6 @@
-import {useCallback, useEffect, useMemo, useState} from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import './App.css'
+import ResultModal from "./components/ResultModal.jsx";
 
 const wordList = [
   'BAKE',
@@ -31,31 +32,31 @@ function App() {
   ]))
 
   const solve = useCallback(() => {
-    for (let i = 0; i < wordSize; i++) {
-      for (let j = 0; j < wordSize; j++) {
-        if (tries.get(`try${currentTry}`)[i][0] === solution[j]) {
-          if (i === j) {
-            setTries(prevState => {
-              const newState = new Map(prevState);
+    setTries(prevState => {
+      const newState = new Map(prevState);
+      for (let i = 0; i < wordSize; i++) {
+        for (let j = 0; j < wordSize; j++) {
+          if (newState.get(`try${currentTry}`)[i][0] === solution[j]) {
+            if (i === j) {
               const updatedTryData = newState.get(`try${currentTry}`);
-              updatedTryData[i][1] = 'green-square';
-              return newState.set(`try${currentTry}`, updatedTryData);
-            });
-            break;
-          } else {
-            setTries(prevState => {
-              const newState = new Map(prevState);
+              updatedTryData[i][1] = 'green';
+              newState.set(`try${currentTry}`, updatedTryData);
+              break;
+            } else {
               const updatedTryData = newState.get(`try${currentTry}`);
-              updatedTryData[i][1] = 'yellow-square';
-              return newState.set(`try${currentTry}`, updatedTryData);
-            });
+              updatedTryData[i][1] = 'yellow';
+              newState.set(`try${currentTry}`, updatedTryData);
+            }
           }
         }
       }
-    }
-    if (tries.get(`try${currentTry}`).every(curr => curr === 'green-square')) {
-      return setResult('WIN');
-    }
+
+      if (tries.get(`try${currentTry}`).every(letter => letter[1] === 'green')) {
+        setResult('WIN');
+      }
+      return newState;
+    });
+
     setCurrentTry(currentTry + 1);
     setCurrentPos(0);
   }, [currentTry, solution, tries]);
@@ -85,7 +86,8 @@ function App() {
       }
       if (event.key === 'Enter') {
         if (currentPos !== wordSize) {
-          return setError('Not enough letters!');
+          setError('Not enough letters!');
+          return setTimeout(() => setError(undefined), 2000);
         }
         solve();
       }
@@ -117,6 +119,7 @@ function App() {
       </div>
       {solution}
       {error && <span>{error}</span>}
+      {<ResultModal result={result} onClose={() => setResult('')}/>}
     </>
   )
 }
