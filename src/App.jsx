@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import './App.css'
 import ResultModal from "./components/ResultModal.jsx";
 
@@ -19,8 +19,8 @@ const wordList = [
 
 function App() {
   const wordSize = 4;
-  const solution = useMemo(() => wordList[Math.floor(Math.random() * wordList.length)], []);
 
+  const [solution, setSolution] = useState(wordList[Math.floor(Math.random() * wordList.length)]);
   const [currentTry, setCurrentTry] = useState(1);
   const [currentPos, setCurrentPos] = useState(0);
   const [result, setResult] = useState('');
@@ -30,6 +30,18 @@ function App() {
     ['try2', Array(4).fill(['',''])],
     ['try3', Array(4).fill(['',''])],
   ]))
+
+  const resetGame = () => {
+    setResult('');
+    setTries(new Map([
+      ['try1', Array(4).fill(['',''])],
+      ['try2', Array(4).fill(['',''])],
+      ['try3', Array(4).fill(['',''])],
+    ]));
+    setCurrentPos(0);
+    setCurrentTry(1);
+    setSolution(wordList[Math.floor(Math.random() * wordList.length)]);
+  }
 
   const solve = useCallback(() => {
     setTries(prevState => {
@@ -57,7 +69,7 @@ function App() {
       }
 
       if (tries.get(`try${currentTry}`).every(letter => letter[1] === 'green')) {
-        setTimeout(() => setResult('WIN'), 1000);
+        setTimeout(() => setResult('WIN'), 700);
       }
       return newState;
     });
@@ -68,6 +80,9 @@ function App() {
 
   useEffect(() => {
     const handleKeyUp = (event) => {
+      if (result) {
+        return;
+      }
       if (event.key >= 'a' && event.key <= 'z') {
         if (currentPos === wordSize) {
           return;
@@ -103,7 +118,7 @@ function App() {
     return () => {
       window.removeEventListener('keyup', handleKeyUp);
     }
-  }, [currentTry, currentPos, solve]);
+  }, [currentTry, currentPos, solve, result]);
 
   return (
     <>
@@ -126,7 +141,7 @@ function App() {
       </div>
       {solution}
       {error && <span>{error}</span>}
-      {<ResultModal result={result} onClose={() => setResult('')}/>}
+      {<ResultModal result={result} onClose={() => resetGame()}/>}
     </>
   )
 }

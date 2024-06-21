@@ -6,7 +6,7 @@ const ResultModal = ({ result, onClose }) => {
     <div className={`modal-container ${result ? 'show' : ''}`}>
       <div className={`modal-content`}>
         <h1>Congratulations!</h1>
-        <button onClick={onClose}>Close</button>
+        <button onClick={onClose}>Play Again</button>
         <div className={'firework'}></div>
         <div className={'firework'}></div>
         <div className={'firework'}></div>
