@@ -48,11 +48,16 @@ function App() {
               newState.set(`try${currentTry}`, updatedTryData);
             }
           }
+          const updatedTryData = newState.get(`try${currentTry}`);
+          if (j === wordSize - 1 && updatedTryData[i][1] === '') {
+            updatedTryData[i][1] = 'gray';
+            newState.set(`try${currentTry}`, updatedTryData);
+          }
         }
       }
 
       if (tries.get(`try${currentTry}`).every(letter => letter[1] === 'green')) {
-        setResult('WIN');
+        setTimeout(() => setResult('WIN'), 1000);
       }
       return newState;
     });
@@ -102,20 +107,22 @@ function App() {
 
   return (
     <>
-      <div className='try-container'>
-        {tries.get('try1').map(((try1, idx) => {
-          return <div className={`box ${try1[1]}`} key={idx}>{try1[0]}</div>
-        }))}
-      </div>
-      <div className='try-container'>
-        {tries.get('try2').map(((try2, idx) => {
-          return <div className={`box ${try2[1]}`} key={idx}>{try2[0]}</div>
-        }))}
-      </div>
-      <div className='try-container'>
-        {tries.get('try3').map(((try3, idx) => {
-          return <div className={`box ${try3[1]}`} key={idx}>{try3[0]}</div>
-        }))}
+      <div className='grid-container'>
+        <div className='try-container'>
+          {tries.get('try1').map(((try1, idx) => {
+            return <div className={`box ${try1[1]}`} key={idx}>{try1[0]}</div>
+          }))}
+        </div>
+        <div className='try-container'>
+          {tries.get('try2').map(((try2, idx) => {
+            return <div className={`box ${try2[1]}`} key={idx}>{try2[0]}</div>
+          }))}
+        </div>
+        <div className='try-container'>
+          {tries.get('try3').map(((try3, idx) => {
+            return <div className={`box ${try3[1]}`} key={idx}>{try3[0]}</div>
+          }))}
+        </div>
       </div>
       {solution}
       {error && <span>{error}</span>}

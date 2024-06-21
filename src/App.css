@@ -1,25 +1,60 @@
+html, body {
+  background: black;
+  min-height: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid-container {
+  display: grid;
+  gap: 10px;
+}
+
 .try-container {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
 .try-container .box {
   width: 80px;
   height: 80px;
   padding: 10px;
-  border-width: 2px;
+  border-width: 1px;
   border-style: solid;
-  border-color: lightblue;
+  border-color: gray;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 80px;
+  color: white;
 }
 
 .green {
   background-color: green;
+  animation: rotateBox 1s;
 }
 
 .yellow {
-  background-color: yellow;
+  background-color: rgb(181, 159, 59);
+  animation: rotateBox 1s;
+}
+
+.gray {
+  background-color: gray;
+  animation: rotateBox 1s;
+}
+
+@keyframes rotateBox {
+  from {
+    opacity: 0.5;
+    transform: rotateY(-90deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotateY(0deg);
+  }
 }

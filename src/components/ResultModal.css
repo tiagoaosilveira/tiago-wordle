@@ -4,11 +4,11 @@
   top: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.7);
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 1;
+  z-index: 1000;
 }
 
 .modal-container.show {
@@ -16,12 +16,14 @@
 }
 
 .modal-content {
-  width: 50%;
-  height: 50%;
+  width: 60%;
+  max-width: 500px;
   background: white;
-  padding: 20px;
-  border-radius: 5px;
-  animation: modalFadeIn 0.5s;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  text-align: center;
+  animation: modalFadeIn 0.5s ease-out;
 }
 
 @keyframes modalFadeIn {
@@ -33,4 +35,94 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #4285f4;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #357ae8;
+}
+
+@keyframes firework {
+  0% {
+    transform: translate(-50%, 60vh);
+    width: 0.5vmin;
+    opacity: 1;
+  }
+  50% {
+    width: 0.5vmin;
+    opacity: 1;
+  }
+  100% {
+    width: 45vmin;
+    opacity: 0;
+  }
+}
+
+.firework,
+.firework::before,
+.firework::after {
+  --top: 60vh;
+  content: "";
+  position: absolute;
+  top: 40%;
+  left: 35%;
+  transform: translate(-50%, -50%);
+  width: 0.5vmin;
+  aspect-ratio: 1;
+  background:
+    radial-gradient(circle, yellow 0.2vmin, #0000 0) 50% 00% no-repeat,
+    radial-gradient(circle, green 0.3vmin, #0000 0) 00% 50% no-repeat,
+    radial-gradient(circle, blue 0.5vmin, #0000 0) 50% 99% no-repeat,
+    radial-gradient(circle, red 0.2vmin, #0000 0) 99% 50% no-repeat,
+    radial-gradient(circle, black 0.3vmin, #0000 0) 80% 90% no-repeat,
+    radial-gradient(circle, pink 0.5vmin, #0000 0) 95% 90% no-repeat,
+    radial-gradient(circle, orange 0.5vmin, #0000 0) 10% 60% no-repeat,
+    radial-gradient(circle, darkgreen 0.2vmin, #0000 0) 31% 80% no-repeat,
+    radial-gradient(circle, darkblue 0.3vmin, #0000 0) 80% 10% no-repeat,
+    radial-gradient(circle, darkmagenta 0.2vmin, #0000 0) 90% 23% no-repeat,
+    radial-gradient(circle, turquoise 0.3vmin, #0000 0) 45% 20% no-repeat,
+    radial-gradient(circle, violet 0.5vmin, #0000 0) 13% 24% no-repeat;
+  background-size: 0.5vmin 0.5vmin;
+  animation: firework 2s infinite;
+}
+
+.firework~.firework,
+.firework~.firework::before,
+.firework~.firework::after {
+  left: 55%;
+  top: 35%;
+  animation-delay: 0.5s;
+}
+
+.firework~.firework~.firework,
+.firework~.firework~.firework::before,
+.firework~.firework~.firework::after {
+  left: 65%;
+  top: 55%;
+  animation-delay: 0.25s;
+}
+
+.firework::before {
+  transform: translate(-50%, -50%) rotate(25deg) !important;
+}
+
+.firework::after {
+  transform: translate(-50%, -50%) rotate(-37deg) !important;
 }
