@@ -5,11 +5,16 @@ const ResultModal = ({ result, onClose }) => {
   return (
     <div className={`modal-container ${result ? 'show' : ''}`}>
       <div className={`modal-content`}>
-        <h1>Congratulations!</h1>
+        {result === 'WIN' && <h1>Congratulations!</h1>}
+        {result === 'LOSE' && <h1>You lost after 3 tries!</h1>}
         <button onClick={onClose}>Play Again</button>
-        <div className={'firework'}></div>
-        <div className={'firework'}></div>
-        <div className={'firework'}></div>
+        {result === 'WIN' &&
+          <div>
+            <div className={'firework'}></div>
+            <div className={'firework'}></div>
+            <div className={'firework'}></div>
+          </div>
+        }
       </div>
     </div>
   )

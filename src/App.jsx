@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import './App.css'
 import ResultModal from "./components/ResultModal.jsx";
+import ErrorToast from "./components/ErrorToast.jsx";
 
+const wordSize = 4;
 const wordList = [
   'BAKE',
   'FOUR',
@@ -18,8 +20,6 @@ const wordList = [
 ];
 
 function App() {
-  const wordSize = 4;
-
   const [solution, setSolution] = useState(wordList[Math.floor(Math.random() * wordList.length)]);
   const [currentTry, setCurrentTry] = useState(1);
   const [currentPos, setCurrentPos] = useState(0);
@@ -70,6 +70,10 @@ function App() {
 
       if (tries.get(`try${currentTry}`).every(letter => letter[1] === 'green')) {
         setTimeout(() => setResult('WIN'), 700);
+      } else {
+        if (currentTry === 3) {
+          setTimeout(() => setResult('LOSE'), 700);
+        }
       }
       return newState;
     });
@@ -107,7 +111,7 @@ function App() {
       if (event.key === 'Enter') {
         if (currentPos !== wordSize) {
           setError('Not enough letters!');
-          return setTimeout(() => setError(undefined), 2000);
+          return setTimeout(() => setError(undefined), 1500);
         }
         solve();
       }
@@ -139,9 +143,8 @@ function App() {
           }))}
         </div>
       </div>
-      {solution}
-      {error && <span>{error}</span>}
       {<ResultModal result={result} onClose={() => resetGame()}/>}
+      {<ErrorToast error={error}/>}
     </>
   )
 }
